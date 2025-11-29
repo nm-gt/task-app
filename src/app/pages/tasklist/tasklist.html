@@ -1,0 +1,187 @@
+<!-- Main action bar: sorting, filtering, search, and add button -->
+<div class="d-flex align-items-center gap-2 mb-2">
+
+    <!-- Sort tasks by status -->
+    <button (click)="sortTask()" type="button" class="btn btn-secondary">
+        بر اساس وضعیت
+    </button>
+
+    <!-- Sort tasks by grade/importance -->
+    <button (click)="sortByGrade()" type="button" class="btn btn-secondary">
+        بر اساس اهمیت
+    </button>
+
+    <!-- Dropdown for filtering tasks by category -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            انتخاب دسته بندی
+        </button>
+
+        <ul class="dropdown-menu">
+            <!-- Each item applies a filter for a specific category -->
+            <li><a class="dropdown-item" href="#" (click)="filterByCategory($event, 'یادگیری')">یادگیری</a></li>
+            <li><a class="dropdown-item" href="#" (click)="filterByCategory($event, 'تجاری')">تجارت</a></li>
+            <li><a class="dropdown-item" href="#" (click)="filterByCategory($event, 'مدیریت')">مدیریت</a></li>
+            <li><a class="dropdown-item" href="#" (click)="filterByCategory($event, 'توسعه')">توسعه</a></li>
+            <li><a class="dropdown-item" href="#" (click)="filterByCategory($event, 'طراحی')">طراحی</a></li>
+
+            <!-- Show all tasks without filtering -->
+            <li><a class="dropdown-item" href="#" (click)="filterByCategory($event, '')">همه</a></li>
+        </ul>
+    </div>
+
+    <!-- Dropdown for filtering tasks by importance grade -->
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            اهمیت
+        </button>
+
+        <ul class="dropdown-menu">
+            <!-- Generate grade items dynamically (1–5) -->
+            <li *ngFor="let g of [1,2,3,4,5]">
+                <a class="dropdown-item" href="#" (click)="filterByGrade($event, g)">
+                    {{ g }}
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Search form with 2-way binding -->
+    <form class="d-flex align-items-center gap-2 flex-grow-1" (ngSubmit)="onSearch()">
+
+        <!-- Search input field -->
+        <input class="form-control" type="search" placeholder="جستجو..." [(ngModel)]="searchTerm" name="search">
+
+        <!-- Button to submit search -->
+        <button class="btn btn-outline-success" type="submit">جستجو</button>
+
+        <!-- Button to navigate to "add task" page -->
+        <button class="btn btn-primary" [routerLink]="'/addtask'">
+            <i class="bi bi-plus-circle"></i>
+        </button>
+
+    </form>
+
+</div>
+
+<!-- Table displaying tasks -->
+<div class="bd-example border border-1 border-primary mt-3 mb-3">
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>وظیفه</th>
+                <th>شرح</th>
+                <th>دسته بندی</th>
+                <th>درجه اهمیت</th>
+                <th>وضعیت</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <!-- Paginate task list: 4 items per page -->
+            <tr *ngFor="let task of filteredTasks | paginate: { itemsPerPage: 4, currentPage: page }">
+
+                <!-- Display task fields -->
+                <td>{{ task.id }}</td>
+                <td>{{ task.task }}</td>
+                <td>{{ task.desc }}</td>
+                <td>{{ task.category }}</td>
+                <td>{{ task.grade }}</td>
+
+                <!-- Status: 1 = active, 0 = inactive -->
+                <td [appUserStatus]="task.status">
+                    {{ task.status === 1 ? 'فعال' : 'غیر فعال' }}
+                </td>
+
+
+                <!-- Action buttons: edit & delete -->
+                <td class="d-flex gap-2">
+                    <!-- Open edit modal -->
+                    <button (click)="openEditModal(task)" class="btn btn-sm btn-primary">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+
+                    <!-- Open delete confirmation modal -->
+                    <button (click)="openDeleteModal(task.id)" class="btn btn-sm btn-danger">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </td>
+
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination component -->
+    <pagination-controls (pageChange)="page = $event"></pagination-controls>
+</div>
+
+<!-- Delete confirmation modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal header -->
+            <div class="modal-header">
+                <h5 class="modal-title">تایید حذف</h5>
+                <button type="button" class="btn-close" (click)="closeModal()"></button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                آیا از حذف این وظیفه اطمینان دارید؟
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeModal()">انصراف</button>
+                <button type="button" class="btn btn-danger" (click)="confirmDelete()">حذف</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Edit task modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal header -->
+            <div class="modal-header">
+                <h5 class="modal-title">ویرایش وظیفه</h5>
+                <button type="button" class="btn-close" (click)="closeModal2()"></button>
+            </div>
+
+            <!-- Modal body with fields bound to selectedTask -->
+            <div class="modal-body" *ngIf="selectedTask as st">
+
+                <!-- Editing fields with 2-way binding -->
+                <input type="text" class="form-control mb-2" placeholder="وظیفه" [(ngModel)]="st.task" name="task">
+
+                <input type="text" class="form-control mb-2" placeholder="شرح" [(ngModel)]="st.desc" name="desc">
+
+                <input type="text" class="form-control mb-2" placeholder="دسته بندی" [(ngModel)]="st.category"
+                    name="category">
+
+                <input type="number" class="form-control mb-2" placeholder="درجه اهمیت" [(ngModel)]="st.grade"
+                    name="grade" min="1" max="5">
+
+                <select class="form-select mb-2" [(ngModel)]="st.status" name="status">
+                    <option [ngValue]="1">فعال</option>
+                    <option [ngValue]="0">غیر فعال</option>
+                </select>
+
+            </div>
+
+            <!-- Modal footer buttons -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeModal2()">انصراف</button>
+                <button type="button" class="btn btn-success" (click)="applyChanges()">اعمال تغییرات</button>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+<div class="d-flex flex-wrap gap-3">
+    <app-cards *ngFor="let card of cards" [title]="card.title" [subtitle]="card.subtitle" [text]="card.text">
+    </app-cards>
+</div>
+
+<div class="d-flex">
+    <app-chart></app-chart>
+    <app-chart2></app-chart2>
+</div>
+
+<h3 class="mb-5">لیست آخرین کاربران افزوده شده</h3>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">نام</th>
+            <th scope="col">نام خانوادگی</th>
+            <th scope="col">ایمیل</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>احمد</td>
+            <td>احمدی</td>
+            <td>@mdo</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>امین</td>
+            <td>امینی</td>
+            <td>@fat</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>رضا</td>
+            <td>رضایی</td>
+            <td>@fat</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>رضا</td>
+            <td>رضایی</td>
+            <td>@fat</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>رضا</td>
+            <td>رضایی</td>
+            <td>@fat</td>
+        </tr>
+    </tbody>
+
+</table>

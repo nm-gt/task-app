@@ -1,0 +1,20 @@
+<nav style="padding: 0; margin: 0;" class="navbar bg-secondary">
+  <div class="container">
+    <nav class="navbar navbar-dark px-0 m-0">
+      <button class="btn btn-md btn-primary" type="button" (click)="toggleSidebar()">
+        <i class="bi bi-toggles2"></i>
+      </button>
+
+    </nav>
+  </div>
+</nav>
+
+<div class="app-layout">
+
+  <app-sidebar [class.hidden]="sidebarHidden" (toggleSidebarEvent)="toggleSidebar()">
+  </app-sidebar>
+
+  <div class="main-content" [ngClass]="{'full-width': sidebarHidden}">
+    <router-outlet></router-outlet>
+  </div>
+</div>

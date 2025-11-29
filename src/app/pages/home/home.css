@@ -1,0 +1,22 @@
+.chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    height: 200px;
+    border-left: 1px solid #333;
+    border-bottom: 1px solid #333;
+    padding: 10px;
+    background: #f9f9f9;
+}
+
+.bar {
+    width: 30px;
+    background-color: #36a2eb;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.bar:hover {
+    background-color: #2a8ad6;
+    cursor: pointer;
+}

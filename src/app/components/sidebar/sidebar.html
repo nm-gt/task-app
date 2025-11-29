@@ -1,0 +1,43 @@
+<div class="d-flex flex-column flex-shrink-0 sidebar text-white bg-dark w-100 justify-content-between"
+    [ngClass]="{'sidebar-hidden': sidebarHidden}" style="padding: 1rem;">
+
+    <a href="/" class="d-flex align-items-center justify-content-between text-white text-decoration-none w-100 mb-3">
+        <h6 class="mb-0">لیست وظایف</h6>
+    </a>
+
+    <p>نام: احمد</p>
+    <p>نام خانوادگی: احمدی</p>
+    <p class="mb-0">تاریخ افزوده شده: {{today}}</p>
+    <hr>
+
+    <ul class="nav nav-pills flex-column mb-auto" style="padding-right: 0;">
+        <li class="nav-item">
+            <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+                class="nav-link">
+                <i class="bi bi-house-door me-2"></i>
+                خانه
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a routerLink="/tasklist" routerLinkActive="active" class="nav-link">
+                <i class="bi bi-speedometer2 me-2"></i>
+                لیست وظایف
+            </a>
+        </li>
+
+        <li *ngIf="auth.isLoggedIn()" class="nav-item">
+            <a routerLink="/addtask" routerLinkActive="active" class="nav-link">
+                <i class="bi bi-calendar me-2"></i>
+                افزودن وظیفه
+            </a>
+        </li>
+        <li class="nav-item">
+            <a routerLink="/signup" routerLinkActive="active" class="nav-link">
+                <i class="bi bi-calendar me-2"></i>
+                ثبت نام
+            </a>
+        </li>
+
+    </ul>
+</div>

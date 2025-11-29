@@ -1,0 +1,97 @@
+<div id="logreg-forms">
+    <form class="form-signin">
+        <h1 class="h3 mb-3 font-weight-normal text-center">ثبت نام</h1>
+
+        <div class="social-login d-flex gap-2">
+            <button class="btn facebook-btn social-btn w-100" type="button">
+                <span><i class="fab fa-facebook-f"></i> ثبت نام با فیس بوک</span>
+            </button>
+
+            <button class="btn google-btn social-btn w-100" type="button">
+                <span><i class="fab fa-google-plus-g"></i> ثبت نام با گوگل</span>
+            </button>
+        </div>
+
+        <p class="text-center">یا</p>
+
+        <input type="text" [formControl]="name" class="form-control" id="nameInput" placeholder="نام">
+        <div *ngIf="name.invalid && name.touched">
+            <small class="text-danger" *ngIf="name.errors?.['required']">فیلد نام اجباری است</small>
+            <small class="text-danger" *ngIf="name.errors?.['minlength']">باید حداقل 2 کاراکتر باشد</small>
+        </div>
+
+        <div>
+            <input type="text" [formControl]="lastname" class="form-control" id="lastnameInput"
+                placeholder="نام خانوادگی">
+            <div *ngIf="lastname.invalid && lastname.touched">
+                <small class="text-danger" *ngIf="lastname.errors?.['required']">نام خانوادگی الزامی است</small>
+                <small class="text-danger" *ngIf="lastname.errors?.['minlength']">حداقل باید 2 کاراکتر باشد</small>
+            </div>
+        </div>
+        <div>
+            <input type="email" [formControl]="email" class="form-control" id="emailInput" placeholder="آدرس ایمیل">
+            <div *ngIf="email.invalid && email.touched">
+                <small class="text-danger" *ngIf="email.errors?.['required']">فیلد ایمیل الزامی ست</small>
+                <small class="text-danger" *ngIf="email.errors?.['email']">فرمت ایمیل صحیح نیست</small>
+            </div>
+        </div>
+        <div>
+            <input type="password" [formControl]="password" class="form-control" id="passwordInput" placeholder="پسورد">
+            <div *ngIf="password.invalid && password.touched">
+                <small class="text-danger" *ngIf="password.errors?.['required']">فیلد پسورد نمیتواند خالی باشد</small>
+                <small class="text-danger" *ngIf="password.errors?.['minlength']">باید حداقل 6 کاراکتر باشد</small>
+            </div>
+        </div>
+
+        <button class="btn btn-success w-100" type="submit" (click)="onSubmitClicked($event)">
+            <i class="fas fa-sign-in-alt"></i> ثبت نام
+        </button>
+
+        <a href="#" id="forgot_pswd">فراموشی رمز عبور؟</a>
+        <hr>
+
+        <div class="d-flex gap-2">
+            <button (click)="doLogin()" class="btn btn-primary w-100" type="button" id="btn-signup">
+                <i class="fas fa-user-plus"></i> ورود به سیستم
+            </button>
+            <button (click)="doLogout()" class="btn btn-danger w-100" type="button" id="btn-signup">
+                <i class="fas fa-user-plus"></i>خروج از سیستم
+            </button>
+        </div>
+    </form>
+
+    <form action="/reset/password/" class="form-reset">
+        <input type="email" id="resetEmail" class="form-control" placeholder="Email address" required autofocus>
+
+        <button class="btn btn-primary w-100" type="submit">
+            ریست کردن پسورد
+        </button>
+    </form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                کاربر با اطلاعات زیر ثبت نام شد
+            </div>
+
+            <div class="mb-2 p-2">
+                name: {{ name.value }}
+                <br />
+                lastname: {{ lastname.value }}
+                <br />
+                email: {{ email.value }}
+                <br />
+                password: {{ password.value }}
+                <br />
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- Modal -->

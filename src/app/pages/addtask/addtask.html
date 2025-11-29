@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+    <div>
+        <!-- عنوان تسک -->
+        <div class="input-group mb-3">
+            <input type="text" [formControl]="taskTitleControl" placeholder="Add your Task" class="form-control"
+                aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+
+        <!-- توضیحات -->
+        <div class="input-group mt-1">
+            <textarea [formControl]="descControl" class="form-control" aria-label="With textarea"></textarea>
+        </div>
+
+        <!-- دسته بندی و درجه -->
+        <div class="d-flex gap-2 mt-2">
+            <div class="dropdown mb-2">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    دسته بندی ها
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" (click)="selectCategory('Food', $event)" href="#">غذا</a></li>
+                    <li><a class="dropdown-item" (click)="selectCategory('Learn', $event)" href="#">یادگیری</a></li>
+                    <li><a class="dropdown-item" (click)="selectCategory('Entertainment', $event)" href="#">سرگرمی</a>
+                    </li>
+                    <li><a class="dropdown-item" (click)="selectCategory('Cook', $event)" href="#">آشپزی</a></li>
+                    <li><a class="dropdown-item" (click)="selectCategory('Business', $event)" href="#">کسب و کار</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="dropdown mb-2">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    درجه اهمیت
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" (click)="selectGrade(1, $event)" href="#">1</a></li>
+                    <li><a class="dropdown-item" (click)="selectGrade(2, $event)" href="#">2</a></li>
+                    <li><a class="dropdown-item" (click)="selectGrade(3, $event)" href="#">3</a></li>
+                    <li><a class="dropdown-item" (click)="selectGrade(4, $event)" href="#">4</a></li>
+                    <li><a class="dropdown-item" (click)="selectGrade(5, $event)" href="#">5</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- دکمه افزودن با disabled binding -->
+        <div>
+            <button (click)="addTask()" type="button"
+                [disabled]="!taskTitleControl.value || taskTitleControl.value.trim() === ''"
+                class="btn btn-secondary mt-2 flex-fill w-100">
+                افزودن
+            </button>
+        </div>
+    </div>
+</div>
