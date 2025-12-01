@@ -1,13 +1,13 @@
-import { NgIf } from '@angular/common';
+import { NgIf, NgClass } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../auth.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule, NgIf, NgClass],
   templateUrl: './signup.html',
   styleUrls: ['./signup.css'],
 })
@@ -18,11 +18,27 @@ export class Signup {
   name = new FormControl('', [Validators.required, Validators.minLength(2)]);
   lastname = new FormControl('', [Validators.required, Validators.minLength(2)]);
   email = new FormControl('', [Validators.required, Validators.email]);
-  password = new FormControl('', [Validators.required, Validators.minLength(6)]);
+  form = new FormGroup({
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.pattern(/^(?=.*\d)(?=.*[&*]).+$/)
+    ]),
+    confirmpassword: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6)
+    ])
+  }, {
+    validators: (form: AbstractControl) => {
+      const password = form.get('password')?.value;
+      const confirm = form.get('confirmpassword')?.value;
+      return password === confirm ? null : { passwordMismatch: true };
+    }
+  });
 
   onSubmitClicked(e: Event) {
     e.preventDefault();
-    if (this.name.invalid || this.lastname.invalid || this.email.invalid || this.password.invalid) {
+    if (this.name.invalid || this.lastname.invalid || this.email.invalid || this.form.invalid) {
       alert("⚠️ فیلدها باید به درستی پر شوند");
     } else {
       this.openDeleteModal();
@@ -52,7 +68,7 @@ export class Signup {
     this.name.reset();
     this.lastname.reset();
     this.email.reset();
-    this.password.reset();
+    this.form.reset();
   }
 
   doLogin() {
