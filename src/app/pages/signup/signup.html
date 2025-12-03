@@ -35,14 +35,43 @@
             <small class="text-danger" *ngIf="email.errors?.['email']">فرمت ایمیل صحیح نیست</small>
         </div>
 
-        <input type="password" formControlName="password" class="form-control" placeholder="پسورد"
-            [ngClass]="{'my-invalid': form.get('password')?.invalid && form.get('password')?.touched}">
-        <div *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
-            <small class="text-danger" *ngIf="form.get('password')?.errors?.['required']">فیلد پسورد نمی‌تواند خالی
-                باشد</small>
-            <small class="text-danger" *ngIf="form.get('password')?.errors?.['minlength']">حداقل 6 کاراکتر</small>
-            <small class="text-danger" *ngIf="form.get('password')?.errors?.['pattern']">پسورد ضعیف است</small>
+        <div class="password-wrapper">
+            <input [type]="show ? 'text' : 'password'" formControlName="password" placeholder="پسورد"
+                class="form-control password-input" (input)="updateConditions()" />
+
+            <span class="toggle-icon" (click)="togglePassword()">
+                @if(!show) {
+                <i class="bi bi-eye"></i>
+                }
+                @if(show){
+                <i class="bi bi-eye-slash"></i>
+                }
+            </span>
         </div>
+
+
+        <div style="padding: 10px 5px; background-color: white; margin-bottom: 5px;"
+            *ngIf="form.get('password')?.touched">
+            <div class="password-strength">
+                <div class="box" [style.background]="getBoxColor(0)"></div>
+                <div class="box" [style.background]="getBoxColor(1)"></div>
+                <div class="box" [style.background]="getBoxColor(2)"></div>
+                <div class="box" [style.background]="getBoxColor(3)"></div>
+            </div>
+
+            <div>
+                <small class="text-danger" *ngIf="form.get('password')?.errors?.['required']">
+                    فیلد پسورد نمی‌تواند خالی باشد
+                </small>
+            </div>
+
+            <small [style.color]="getColorFor(conditions.length)">حداقل ۸ کاراکتر</small><br>
+            <small [style.color]="getColorFor(conditions.uppercase)">حداقل یک حرف بزرگ</small><br>
+            <small [style.color]="getColorFor(conditions.special)">حداقل یک کاراکتر ویژه #@!</small><br>
+            <small [style.color]="getColorFor(conditions.number)">حداقل یک عدد</small>
+
+        </div>
+
 
         <input type="password" formControlName="confirmpassword" class="form-control" placeholder="تکرار پسورد"
             [ngClass]="{'my-invalid': form.get('confirmpassword')?.invalid && form.get('confirmpassword')?.touched}">
@@ -50,14 +79,19 @@
             <small class="text-danger">پسوردها با هم مطابقت ندارند</small>
         </div>
 
+        <input type="tel" [formControl]="phone" class="form-control" placeholder="شماره موبایل"
+            style="direction: rtl; text-align: right;">
+
+        @if(phone.invalid && phone.touched) {
+        <div class="text-danger">شماره موبایل معتبر نیست </div>
+        }
+
         <button class="btn btn-success w-100 cursor-not-allowed" type="submit"
             [style.opacity]="form.invalid || name.invalid || lastname.invalid || email.invalid ? '0.5' : '1'"
             [style.pointerEvents]="form.invalid || name.invalid || lastname.invalid || email.invalid ? 'none' : 'auto'"
             [ngClass]="{'cursor-not-allowed': form.invalid || name.invalid || lastname.invalid || email.invalid}">
             ثبت نام
         </button>
-
-
 
         <a href="#" id="forgot_pswd">فراموشی رمز عبور؟</a>
         <hr>
